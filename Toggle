@@ -1,0 +1,72 @@
+local ScreenGui = Instance.new("ScreenGui")
+local ToggleButton = Instance.new("TextButton")
+
+ScreenGui.Name = "ToggleGui"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Parent = ScreenGui
+ToggleButton.Size = UDim2.new(0, 200, 0, 50)
+ToggleButton.Position = UDim2.new(0, 100, 0, 100)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(153, 50, 204)
+ToggleButton.BackgroundTransparency = 0.2
+ToggleButton.TextColor2 = Color2.new(20, 112, 224)
+ToggleButton.Font = Enum.Font.SourceSansBold
+ToggleButton.TextSize = 24
+ToggleButton.Text = "Jah is OFF"
+
+local uiCorner = Instance.new("UICorner", ToggleButton)
+uiCorner.CornerRadius = UDim.new(0, 10)
+
+local dragStart = nil
+local startPos = nil
+
+local function onInputBegan(input)
+    if input.UserInputType == Enum.UserInputType.Touch then
+        dragStart = input.Position
+        startPos = ToggleButton.Position
+    end
+end
+
+local function onInputChanged(input)
+    if input.UserInputType == Enum.UserInputType.Touch and dragStart then
+        local delta = input.Position - dragStart
+        ToggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end
+
+local function onInputEnded(input)
+    if input.UserInputType == Enum.UserInputType.Touch then
+        dragStart = nil
+    end
+end
+
+ToggleButton.InputBegan:Connect(onInputBegan)
+ToggleButton.InputChanged:Connect(onInputChanged)
+ToggleButton.InputEnded:Connect(onInputEnded)
+
+local function toggleAimlock()
+    enabled = not enabled
+    if enabled then
+        ToggleButton.Text = "jah is On"
+        Plr = getClosestPlayerToCenter()
+        if Settings.rewrittenmain.NOTIF then
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "",
+                Text = "jah is Targeting: " .. tostring(Plr.Character.Humanoid.DisplayName),
+                Duration = 5
+            })
+        end
+    else
+        ToggleButton.Text = "jah is Off"
+        if Settings.rewrittenmain.NOTIF then
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "",
+                Text = "Unlocked",
+                Duration = 5
+            })
+        end
+    end
+end
+
+ToggleButton.MouseButton1Click:Connect(toggleAimlock)

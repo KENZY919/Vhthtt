@@ -1,0 +1,57 @@
+Logo.Name = "Logo"
+Logo.Parent = Frame
+Logo.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
+Logo.BackgroundTransparency = 3.000
+Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Logo.BorderSizePixel = 0
+Logo.Position = UDim2.new(0.326732665, 0, 0, 0)
+Logo.Size = UDim2.new(0, 64, 0, 65)
+Logo.Image = "rbxassetid://18628237311"
+Logo.ImageTransparency = 0.300
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.fromRGB(75, 80, 255)
+TextButton.BackgroundTransparency = 5.000
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.5, 0, 0.5, 0)  -- Center position
+TextButton.AnchorPoint = Vector2.new(0.5, 0.5)  -- Set anchor point to center
+TextButton.Size = UDim2.new(0, 170, 0, 44)
+TextButton.Font = Enum.Font.SourceSansSemibold
+TextButton.Text = "TOGGLE BLUD"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.TextSize = 15.000
+TextButton.TextWrapped = true
+
+local state = true
+TextButton.MouseButton1Click:Connect(function()
+    state = not state
+    if not state then
+        TextButton.Text = "BLUD ON"
+        CamlockState = true
+        enemy = FindNearestEnemy()
+        FOVCircle.Visible = true -- Ensure visibility
+    else
+        TextButton.Text = "BLUD OFF"
+        CamlockState = false
+        enemy = nil
+        FOVCircle.Visible = true -- Ensure visibility
+    end
+end)
+
+-- Function to create a rainbow effect for TextButton text color
+local function RainbowText()
+    local hue = 0
+    while true do
+        hue = hue + 5 -- Increase hue change per iteration for faster effect
+        if hue > 360 then
+            hue = 0
+        end
+        TextButton.TextColor3 = Color3.fromHSV(hue / 360, 1, 1)
+        wait(0.01) -- Decrease wait time for faster effect
+    end
+end
+
+-- Start the rainbow effect
+spawn(RainbowText)
